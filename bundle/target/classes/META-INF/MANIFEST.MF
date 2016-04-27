@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1461738808936
+Bnd-LastModified: 1461739501524
 Build-Jdk: 1.8.0_77
 Built-By: waring
 Bundle-Description: Maven Multimodule project for My AEM Project.
