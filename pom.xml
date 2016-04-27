@@ -211,6 +211,11 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+          			<groupId>external.atlassian.jgitflow</groupId>
+          			<artifactId>jgitflow-maven-plugin</artifactId>
+          			<version>1.0-m5.1</version>
+        		</plugin>
+                <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-scr-plugin</artifactId>
                     <version>1.20.0</version>
@@ -344,8 +349,60 @@
                     <version>1.0.1</version>
                 </plugin>
 
+  <plugin>
+        <groupId>external.atlassian.jgitflow</groupId>
+        <artifactId>jgitflow-maven-plugin</artifactId>
+        <version>1.0-m5.1</version>
+        <configuration>
+            <!-- Enable this to push to origin using SSH keys. This will roll back to HTTPS user/pass auth if SSH is not setup -->
+            <!-- TEST - this is a bug that was fixed in the release branch. -->
+            <enableSshAgent>true</enableSshAgent>
+
+            <!-- Keep your maven submodules at the same version as the parent POM -->
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+
+            <!--
+              Don't push in-development features to origin. If we need to collaborate, developers
+              can manually push their feature branch to origin.
+            -->
+            <pushFeatures>false</pushFeatures>
+
+            <!--
+              This allows Team City to automatically push new releases to
+              origin; you can then either manually deploy them or, if you are doing Continuous
+              Deployments, auto-deploy them to prod
+            -->
+            <pushReleases>true</pushReleases>
+
+            <!--
+              Hot Fixes should be pushed to origin as well so that any dev can pick them up
+            -->
+            <pushHotfixes>true</pushHotfixes>
+
+            <allowSnapshots>true</allowSnapshots>
+            <!--
+              Only applicable when finishing a release.
+              Whether to turn off maven deployment. If false the "deploy" goal is called. If true the "install" goal is called
+              TRUE - Prevents maven from trying to install this package into a repo such as Nexus. Ideally we'd have this enabled, but we don't have a repo
+            -->
+            <noDeploy>true</noDeploy>
+
+            <flowInitContext>
+              <masterBranchName>master</masterBranchName>
+              <developBranchName>develop</developBranchName>
+              <featureBranchPrefix>feature/</featureBranchPrefix>
+              <releaseBranchPrefix>release/</releaseBranchPrefix>
+              <hotfixBranchPrefix>hotfix-asp/</hotfixBranchPrefix>
+              <versionTagPrefix>stable-</versionTagPrefix>
+            </flowInitContext>
+
+        </configuration>
+      </plugin>
+
             </plugins>
         </pluginManagement>
+        
+        
     </build>
 
     <profiles>
@@ -428,6 +485,17 @@
             <id>analysisCI</id>
             <build>
                 <plugins>
+                
+        <plugin>
+            <groupId>external.atlassian.jgitflow</groupId>
+            <artifactId>jgitflow-maven-plugin</artifactId>
+            <version>1.0-m5.1</version>
+            <configuration>
+                <!-- see goals wiki page for configuration options -->
+            </configuration>
+        </plugin>
+
+                
                     <plugin>
                         <artifactId>maven-pmd-plugin</artifactId>
                         <executions>
